@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.tales.myannotations.domain.Note;
 import com.tales.myannotations.domain.User;
+import com.tales.myannotations.enums.Perfil;
 import com.tales.myannotations.repositories.NoteRepository;
 import com.tales.myannotations.repositories.UserRepository;
 
@@ -35,7 +36,7 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 		 User u3 = new User(null,"gustavo","1235643","gustavo@email.com","senha");
 		 User u4 = new User(null,"adriana","1235643","adriana@email.com","senha");
 		
-		
+		u1.AddPerfil(Perfil.ADMIN);
 		 
 		 Note n1 = new Note(null,"Clean the Car",new Date(),"Clean the car and Wash the tires.");
 		 Note n2 = new Note(null,"Clean the house",new Date(),"Clean the house and take care of the dog.");

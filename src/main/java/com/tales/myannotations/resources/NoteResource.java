@@ -9,26 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tales.myannotations.domain.User;
-import com.tales.myannotations.services.UserService;
+import com.tales.myannotations.domain.Note;
+import com.tales.myannotations.services.NoteService;
 
 @RestController
-@RequestMapping(value="/users")
-public class UserResource {
+@RequestMapping(value="/notes")
+public class NoteResource {
 
 	@Autowired
-	private UserService userservice;
+	private NoteService noteservice;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<User> list() {
+	public List<Note> list() {
 		
-		 return userservice.findAll();	}
+		 return noteservice.findAll();	}
 	
 	
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public  ResponseEntity<?> find(@PathVariable Integer id) {
-		User obj = userservice.search(id);
+		Note obj = noteservice.search(id);
 		return ResponseEntity.ok().body(obj);
 
 	}

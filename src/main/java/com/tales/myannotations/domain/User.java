@@ -2,9 +2,14 @@ package com.tales.myannotations.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tales.myannotations.enums.Perfil;
 
 @Entity
 public class User implements Serializable {
@@ -32,7 +38,12 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Note> notes = new ArrayList<>();
 
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PERFILS")
+	private Set<Integer> perfils = new HashSet<>();
+	
 	public User() {
+		AddPerfil(Perfil.USER);
 	}
 
 	public User(Integer id, String name, String cpf, String email, String password) {
@@ -41,6 +52,7 @@ public class User implements Serializable {
 		this.cpf = cpf;
 		this.email = email;
 		this.password = password;
+		AddPerfil(Perfil.USER);
 	}
 
 	public Integer getId() {
@@ -89,6 +101,16 @@ public class User implements Serializable {
 
 	public void setNotes(List<Note> notes) {
 		this.notes = notes;
+	}
+	
+	
+	public Set<Perfil> getPerfils(){
+		return perfils.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+		
+	}
+	
+	public void AddPerfil(Perfil perfil) {
+		perfils.add(perfil.getCod());
 	}
 
 	@Override
