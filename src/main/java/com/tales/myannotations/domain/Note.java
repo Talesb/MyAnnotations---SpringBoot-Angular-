@@ -1,46 +1,36 @@
 package com.tales.myannotations.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class User implements Serializable {
+public class Note implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
 	private String name;
-	private String cpf;
-	private String email;
-	private String password;
+	private Date data;
+	private String content;
 
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<Note> notes = new ArrayList<>();
+	@ManyToOne
+	private User user;
 
-	public User() {
+	public Note() {
 	}
 
-	public User(Integer id, String name, String cpf, String email, String password) {
+	public Note(Integer id, String name, Date data, String content) {
 		this.id = id;
 		this.name = name;
-		this.cpf = cpf;
-		this.email = email;
-		this.password = password;
+		this.data = data;
+		this.content = content;
 	}
 
 	public Integer getId() {
@@ -59,36 +49,28 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public Date getData() {
+		return data;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getContent() {
+		return content;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public String getPassword() {
-		return password;
+	public User getUser() {
+		return user;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public List<Note> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
@@ -107,7 +89,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Note other = (Note) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -115,5 +97,4 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
-
 }
