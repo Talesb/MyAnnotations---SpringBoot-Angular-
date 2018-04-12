@@ -34,7 +34,7 @@ public class User implements Serializable {
 	private String password;
 
 	
-	@JsonIgnore
+	
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Note> notes = new ArrayList<>();
 

@@ -14,7 +14,7 @@ public class NoteService {
 	@Autowired
 	private NoteRepository repo;
 
-	public Note search(Integer id) {
+	public Note find(Integer id) {
 		return repo.findOne(id);
 	}
 	
@@ -22,9 +22,16 @@ public class NoteService {
 		return repo.findAll();
 	}
 
-	public void insert() {
-		 
-		
+	public Note insert(Note obj) {
+		obj.setId(null);
+		repo.save(obj);
+		return obj;
+
 	}
 
+	public Note update(Note obj) {
+		find(obj.getId());
+
+		return repo.save(obj);
+	}
 }
