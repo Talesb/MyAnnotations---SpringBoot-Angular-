@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tales.myannotations.enums.Perfil;
 
 @Entity
@@ -33,8 +34,8 @@ public class User implements Serializable {
 	private String password;
 
 	
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true,fetch = FetchType.EAGER)
+	 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Note> notes = new ArrayList<>();
 
 	@ElementCollection(fetch=FetchType.EAGER)

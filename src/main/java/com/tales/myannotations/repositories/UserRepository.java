@@ -32,5 +32,4 @@ public void updateemail(@Param("id") Integer id,@Param("email") String email);
 @Query("update User u SET u.password =:password where u.id =:id")
 public void updatepassword(@Param("id") Integer id,@Param("password") String password);
 
-
  }

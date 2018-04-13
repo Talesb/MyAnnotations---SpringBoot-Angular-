@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tales.myannotations.domain.Note;
+import com.tales.myannotations.dto.NewNoteDTO;
 import com.tales.myannotations.services.NoteService;
 
 @RestController
@@ -20,12 +21,12 @@ import com.tales.myannotations.services.NoteService;
 public class NoteResource {
 
 	@Autowired
-	private NoteService  noteservice;
+	private NoteService noteservice;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Note> list() {
-
-		return noteservice.findAll();
+	ResponseEntity<List<Note>> findAll() {
+		List<Note> notes = noteservice.findAll();
+		return ResponseEntity.ok().body(notes);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -36,8 +37,9 @@ public class NoteResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Note obj) {
-		obj = noteservice.insert(obj);
+	public ResponseEntity<Void> insert(@RequestBody NewNoteDTO obj) {
+		Note note = noteservice.fromDTO(obj);
+		note = noteservice.insert(note);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
