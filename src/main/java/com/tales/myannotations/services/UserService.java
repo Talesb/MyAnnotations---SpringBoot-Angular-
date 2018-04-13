@@ -36,10 +36,23 @@ public class UserService {
 
 	}
 
-	public User update(User obj) {
-		find(obj.getId());
-
-		return repo.save(obj);
+	public void update(User obj) {
+		repo.findOne(obj.getId());
+		try {
+		if(obj.getName()!=null){
+			repo.updatename(obj.getId(),obj.getName());
+		 };
+		 if(obj.getCpf()!=null){
+			 repo.updatecpf(obj.getId(),obj.getCpf());
+		 }
+		 if(obj.getEmail()!=null){
+			 repo.updateemail(obj.getId(),obj.getEmail());
+		 }
+		 if(obj.getPassword()!=null){
+			 repo.updatepassword(obj.getId(),obj.getPassword());
+		 }}catch (Exception e) {
+			 throw new RuntimeException("Not Permitted");
+		}
 	}
 
 	public void delete(Integer id) {

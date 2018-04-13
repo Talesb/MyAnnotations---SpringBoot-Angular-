@@ -13,44 +13,47 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tales.myannotations.domain.Note;
-import com.tales.myannotations.domain.User;
 import com.tales.myannotations.services.NoteService;
 
 @RestController
-@RequestMapping(value="/notes")
+@RequestMapping(value = "/notes")
 public class NoteResource {
 
 	@Autowired
-	private NoteService noteservice;
-	
-	@RequestMapping(method=RequestMethod.GET)
+	private NoteService  noteservice;
+
+	@RequestMapping(method = RequestMethod.GET)
 	public List<Note> list() {
-		
-		 return noteservice.findAll();	}
-	
-	
-	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public  ResponseEntity<?> find(@PathVariable Integer id) {
+
+		return noteservice.findAll();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Note obj = noteservice.find(id);
 		return ResponseEntity.ok().body(obj);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Note obj) {
 		obj = noteservice.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	@RequestMapping(value ="/{id}",method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Note obj,@PathVariable Integer id){
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Note obj, @PathVariable Integer id) {
 		obj.setId(id);
-		obj=noteservice.update(obj);
+		noteservice.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 
-}
-	
-	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
+		noteservice.delete(id);
+		return ResponseEntity.noContent().build();
 
+	}
+
+}

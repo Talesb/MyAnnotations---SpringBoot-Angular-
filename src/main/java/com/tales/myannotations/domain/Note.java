@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,8 +23,10 @@ public class Note implements Serializable {
 	private Date data;
 	private String content;
 	
+ 
+ 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(optional=true ,fetch = FetchType.LAZY)
 	private User user;
 
 	public Note() {

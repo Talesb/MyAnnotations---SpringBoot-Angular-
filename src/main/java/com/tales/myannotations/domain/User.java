@@ -17,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tales.myannotations.enums.Perfil;
 
 @Entity
@@ -35,7 +34,7 @@ public class User implements Serializable {
 
 	
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true,fetch = FetchType.EAGER)
 	private List<Note> notes = new ArrayList<>();
 
 	@ElementCollection(fetch=FetchType.EAGER)
@@ -138,4 +137,13 @@ public class User implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", cpf=" + cpf + ", email=" + email + ", password=" + password
+				+ ", notes=" + notes + ", perfils=" + perfils + "]";
+	}
+
+	
+	
+	
 }
