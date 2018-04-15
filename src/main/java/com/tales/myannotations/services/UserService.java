@@ -3,6 +3,7 @@ package com.tales.myannotations.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tales.myannotations.domain.User;
@@ -16,6 +17,9 @@ public class UserService {
 	@Autowired
 	private UserRepository repo;
 
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
 	public User find(Integer id) {
 		User obj = repo.findOne(id);
 
@@ -52,7 +56,7 @@ public class UserService {
 				repo.updateemail(obj.getId(), obj.getEmail());
 			}
 			if (obj.getPassword() != null) {
-				repo.updatepassword(obj.getId(), obj.getPassword());
+				repo.updatepassword(obj.getId(), pe.encode(obj.getPassword()));
 			}
 			System.out.println(obj.getNotes());
 			if (!obj.getNotes().isEmpty()){
@@ -70,7 +74,7 @@ public class UserService {
 	}
 
 	public User fromDTO(UserDTO objDto) {
-		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(), objDto.getPassword());
+		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(), pe.encode(objDto.getPassword()));
 	}
 
 }

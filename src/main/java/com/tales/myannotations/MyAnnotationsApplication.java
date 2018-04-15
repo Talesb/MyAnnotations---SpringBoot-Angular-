@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.tales.myannotations.domain.Note;
 import com.tales.myannotations.domain.User;
@@ -25,16 +26,20 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 	@Autowired
 	private NoteRepository noterepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(MyAnnotationsApplication.class, args);
 	}
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		 User u1 = new User(null,"tales","1235643","tales@email.com","senha");
-		 User u2 = new User(null,"isabele","1235643","isabele@email.com","senha");
-		 User u3 = new User(null,"gustavo","1235643","gustavo@email.com","senha");
-		 User u4 = new User(null,"adriana","1235643","adriana@email.com","senha");
+		 User u1 = new User(null,"tales","1235643","tales@email.com",pe.encode("senha"));
+		 User u2 = new User(null,"isabele","1235643","isabele@email.com",pe.encode("senha"));
+		 User u3 = new User(null,"gustavo","1235643","gustavo@email.com",pe.encode("senha"));
+		 User u4 = new User(null,"adriana","1235643","adriana@email.com",pe.encode("senha"));
 		
 		u1.AddPerfil(Perfil.ADMIN);
 		 
@@ -63,7 +68,8 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 		 
 		 repo.save(Arrays.asList(u1,u2,u3,u4));
 		 noterepository.save(Arrays.asList(n1,n2,n3,n4,n5,n6,n7,n8));
-		 
+		 User u123 = repo.findByEmail("isabele@email.com");
+ 
 		 
 	}
 }
