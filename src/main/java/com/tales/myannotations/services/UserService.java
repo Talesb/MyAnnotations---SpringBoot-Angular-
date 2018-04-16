@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.tales.myannotations.domain.User;
 import com.tales.myannotations.dto.UserDTO;
+import com.tales.myannotations.enums.Perfil;
 import com.tales.myannotations.repositories.UserRepository;
+import com.tales.myannotations.security.UserSS;
+import com.tales.myannotations.services.exception.AuthorizationException;
 import com.tales.myannotations.services.exception.ObjectNotFoundException;
 
 @Service
@@ -19,18 +22,29 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
-	
-	public User find(Integer id) {
-		User obj = repo.findOne(id);
 
-		if (obj == null) {
-			throw new ObjectNotFoundException("User not Found");
-		}
-		System.out.println(obj.toString());
-		return obj;
+	public User find(Integer id) {
+		
+			UserSS userss = UserSSService.authenticated();
+			if (userss == null || !userss.hasRole(Perfil.ADMIN) && !id.equals(userss.getId())) {
+				throw new AuthorizationException("User not Autorizated");
+			}
+			
+			User obj = repo.findOne(id);
+			if (obj == null) {
+				throw new ObjectNotFoundException("User not Found");
+			}
+			return obj;
+
+
 	}
 
 	public List<User> findAll() {
+		UserSS userss = UserSSService.authenticated();
+		if (userss == null || !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");
+		}
+		
 		return repo.findAll();
 	}
 
@@ -59,7 +73,7 @@ public class UserService {
 				repo.updatepassword(obj.getId(), pe.encode(obj.getPassword()));
 			}
 			System.out.println(obj.getNotes());
-			if (!obj.getNotes().isEmpty()){
+			if (!obj.getNotes().isEmpty()) {
 				repo.save(obj);
 			}
 		} catch (Exception e) {
@@ -74,7 +88,8 @@ public class UserService {
 	}
 
 	public User fromDTO(UserDTO objDto) {
-		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(), pe.encode(objDto.getPassword()));
+		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(),
+				pe.encode(objDto.getPassword()));
 	}
 
 }

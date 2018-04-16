@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,17 @@ public class NoteResource {
 
 	@Autowired
 	private NoteService noteservice;
-
+	
+//	@PreAuthorize("hasAnyRole('ADMIN')")
+//	@RequestMapping(method = RequestMethod.GET)
+//	ResponseEntity<List<Note>> findAll() {
+//		List<Note> notes = noteservice.findAll();
+//		return ResponseEntity.ok().body(notes);
+//	}
+	
 	@RequestMapping(method = RequestMethod.GET)
-	ResponseEntity<List<Note>> findAll() {
-		List<Note> notes = noteservice.findAll();
+	ResponseEntity<List<Note>> findByUser() {
+		List<Note> notes = noteservice.findByUser();
 		return ResponseEntity.ok().body(notes);
 	}
 
@@ -36,6 +44,7 @@ public class NoteResource {
 
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody NewNoteDTO obj) {
 		Note note = noteservice.fromDTO(obj);
@@ -44,6 +53,7 @@ public class NoteResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Note obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -51,6 +61,7 @@ public class NoteResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		noteservice.delete(id);

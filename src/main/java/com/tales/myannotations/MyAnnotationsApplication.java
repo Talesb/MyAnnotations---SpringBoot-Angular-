@@ -68,7 +68,7 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 		 
 		 repo.save(Arrays.asList(u1,u2,u3,u4));
 		 noterepository.save(Arrays.asList(n1,n2,n3,n4,n5,n6,n7,n8));
-		 User u123 = repo.findByEmail("isabele@email.com");
+	
  
 		 
 	}
