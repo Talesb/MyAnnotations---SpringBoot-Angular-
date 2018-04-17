@@ -14,6 +14,7 @@ import com.tales.myannotations.domain.User;
 import com.tales.myannotations.enums.Perfil;
 import com.tales.myannotations.repositories.NoteRepository;
 import com.tales.myannotations.repositories.UserRepository;
+import com.tales.myannotations.services.S3Service;
 
 
 
@@ -28,6 +29,8 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 	
 	@Autowired
 	private BCryptPasswordEncoder pe;
+	
+	
 	
 	
 	public static void main(String[] args) {
@@ -65,7 +68,7 @@ public class MyAnnotationsApplication implements CommandLineRunner {
 		 n6.setUser(u2);
 		 n7.setUser(u1);
 		 n8.setUser(u3);
-		 
+ 
 		 repo.save(Arrays.asList(u1,u2,u3,u4));
 		 noterepository.save(Arrays.asList(n1,n2,n3,n4,n5,n6,n7,n8));
 	

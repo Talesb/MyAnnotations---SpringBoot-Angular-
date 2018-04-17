@@ -1,10 +1,12 @@
 package com.tales.myannotations.services;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tales.myannotations.domain.User;
 import com.tales.myannotations.dto.UserDTO;
@@ -22,6 +24,9 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
+	
+	@Autowired
+	private S3Service s3service;
 
 	public User find(Integer id) {
 		
@@ -99,5 +104,10 @@ public class UserService {
 		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(),
 				pe.encode(objDto.getPassword()));
 	}
+	
+	public URI uploadProfilePicture(MultipartFile multipartfile) {
+		return s3service.uploadFile(multipartfile);
+	}
+	
 
 }
