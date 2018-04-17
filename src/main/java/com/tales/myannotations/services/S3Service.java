@@ -50,7 +50,6 @@ public class S3Service {
 			
 			System.out.println(bucketname.toString());
 			
-			System.out.println(bucketname+"========================================="+"myannotation");
 			LOG.info("Iniciando upload");
 			s3client.putObject(bucketname.toString(),fileName, is, meta);
 			LOG.info("Upload finalizado");

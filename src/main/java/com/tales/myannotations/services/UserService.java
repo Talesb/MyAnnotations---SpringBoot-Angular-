@@ -1,9 +1,11 @@
 package com.tales.myannotations.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,23 +26,31 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
-	
+
 	@Autowired
 	private S3Service s3service;
 
-	public User find(Integer id) {
-		
-			UserSS userss = UserSSService.authenticated();
-			if (userss == null || !id.equals(userss.getId()) &&  !userss.hasRole(Perfil.ADMIN)) {
-				throw new AuthorizationException("User not Autorizated");
-			}
-			
-			User obj = repo.findOne(id);
-			if (obj == null) {
-				throw new ObjectNotFoundException("User not Found");
-			}
-			return obj;
+	@Autowired
+	private ImageService imageService;	
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
 
+	@Value("${img.profile.size}")
+private Integer size;
+
+	public User find(Integer id) {
+
+		UserSS userss = UserSSService.authenticated();
+		if (userss == null || !id.equals(userss.getId()) && !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");
+		}
+
+		User obj = repo.findOne(id);
+		if (obj == null) {
+			throw new ObjectNotFoundException("User not Found");
+		}
+		return obj;
 
 	}
 
@@ -49,7 +59,7 @@ public class UserService {
 		if (userss == null || !userss.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("User not Autorizated");
 		}
-		
+
 		return repo.findAll();
 	}
 
@@ -104,10 +114,22 @@ public class UserService {
 		return new User(objDto.getId(), objDto.getName(), objDto.getCpf(), objDto.getEmail(),
 				pe.encode(objDto.getPassword()));
 	}
-	
+
 	public URI uploadProfilePicture(MultipartFile multipartfile) {
-		return s3service.uploadFile(multipartfile);
+		UserSS userss = UserSSService.authenticated();
+		if (userss == null) {
+			throw new AuthorizationException("Not permited");
+		}
+
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartfile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
+		String fileName = prefix + userss.getId() + ".jpg";
+		URI uri = s3service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+		User u = repo.findOne(userss.getId());
+		u.setImageUrl(uri.toString());
+		repo.save(u);
+		return uri;
 	}
-	
 
 }

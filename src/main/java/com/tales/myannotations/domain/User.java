@@ -33,6 +33,7 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 
+	private String imageUrl;
 	
 	 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -111,6 +112,14 @@ public class User implements Serializable {
 	
 	public void AddPerfil(Perfil perfil) {
 		perfils.add(perfil.getCod());
+	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override
