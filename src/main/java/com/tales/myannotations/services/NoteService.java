@@ -40,7 +40,7 @@ public class NoteService {
 		if(obj==null ) {
 			throw new ObjectNotFoundException("User not Found");
 		}
-		if(obj.getUser().getId()!=userss.getId()) {
+		if(obj.getUser().getId() == null || obj.getUser().getId()!=userss.getId() && !userss.hasRole(Perfil.ADMIN)) {
 //			System.out.println("========================="+obj.getUser().getId()+"==============="+userss.getId());
 			throw new AuthorizationException("User not Autorizated");
 		}
@@ -66,7 +66,11 @@ public class NoteService {
 	public Note insert(Note obj) {
 		obj.setId(null);
 		repo.save(obj);
+		UserSS userss = UserSSService.authenticated();
 		User u1 = userservice.find(obj.getUser().getId());
+		if(u1.getId()!=userss.getId()) {
+			throw new AuthorizationException("User not Autorizated");
+		}
 		u1.getNotes().addAll(Arrays.asList(obj));
 		userservice.update(u1);
 		return obj;
@@ -74,9 +78,13 @@ public class NoteService {
 	}
 
 	public void update(Note obj) {
+		Note aux = find(obj.getId());
+		obj.setUser(aux.getUser());
+		UserSS userss = UserSSService.authenticated();
+		if(obj.getUser().getId()!=userss.getId() && !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");
+		}
 		try {
-			Note aux = find(obj.getId());
-			obj.setUser(aux.getUser());
 			if (obj.getName() != null) {
 				repo.updatename(obj.getId(), obj.getUser().getId(), obj.getName());
 			}
@@ -90,7 +98,11 @@ public class NoteService {
 	}
 
 	public void delete(Integer id) {
-		find(id);
+		Note  n1 = find(id);
+		UserSS userss = UserSSService.authenticated();
+		System.out.println(userss.getId()+"++++++++++++++++++++="+n1.getUser().getId()+"+++++++++++++++++++++++");
+		if(n1.getUser().getId()!=userss.getId() && !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");}
 		repo.delete(id);
 
 	}

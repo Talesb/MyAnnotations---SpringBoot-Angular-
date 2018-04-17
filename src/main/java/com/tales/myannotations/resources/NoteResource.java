@@ -44,7 +44,6 @@ public class NoteResource {
 
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody NewNoteDTO obj) {
 		Note note = noteservice.fromDTO(obj);
@@ -53,7 +52,7 @@ public class NoteResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Note obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -61,7 +60,7 @@ public class NoteResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+ 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		noteservice.delete(id);

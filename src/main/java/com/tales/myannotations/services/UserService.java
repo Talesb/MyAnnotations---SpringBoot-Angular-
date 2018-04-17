@@ -26,7 +26,7 @@ public class UserService {
 	public User find(Integer id) {
 		
 			UserSS userss = UserSSService.authenticated();
-			if (userss == null || !userss.hasRole(Perfil.ADMIN) && !id.equals(userss.getId())) {
+			if (userss == null || !id.equals(userss.getId()) &&  !userss.hasRole(Perfil.ADMIN)) {
 				throw new AuthorizationException("User not Autorizated");
 			}
 			
@@ -56,6 +56,10 @@ public class UserService {
 	}
 
 	public void update(User obj) {
+		UserSS userss = UserSSService.authenticated();
+		if (userss == null || !obj.getId().equals(userss.getId()) && !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");
+		}
 		repo.findOne(obj.getId());
 		try {
 
@@ -82,6 +86,10 @@ public class UserService {
 	}
 
 	public void delete(Integer id) {
+		UserSS userss = UserSSService.authenticated();
+		if (userss == null || !id.equals(userss.getId()) && !userss.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("User not Autorizated");
+		}
 		find(id);
 		repo.delete(id);
 

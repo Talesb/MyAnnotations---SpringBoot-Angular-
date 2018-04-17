@@ -26,7 +26,9 @@ public class UserResource {
 
 	@Autowired
 	private UserService userservice;
-
+	
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<UserDTO>> findAll() {
 		List<User> list = userservice.findAll();
@@ -41,7 +43,7 @@ public class UserResource {
 
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody UserDTO objdto) {
 		User user = userservice.fromDTO(objdto);
@@ -50,7 +52,7 @@ public class UserResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UserDTO objDto, @PathVariable Integer id) {
 		User user = userservice.fromDTO(objDto);
@@ -59,7 +61,7 @@ public class UserResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		userservice.delete(id);
