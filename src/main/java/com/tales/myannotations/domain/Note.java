@@ -1,6 +1,7 @@
 package com.tales.myannotations.domain;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -20,22 +21,20 @@ public class Note implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-	private Date data;
+	private String date;
 	private String content;
-	
- 
- 
+
 	@JsonIgnore
-	@ManyToOne(optional=true ,fetch = FetchType.LAZY)
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	private User user;
 
 	public Note() {
 	}
 
-	public Note(Integer id, String name, Date data, String content) {
+	public Note(Integer id, String name, String content) {
 		this.id = id;
 		this.name = name;
-		this.data = data;
+		this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		this.content = content;
 	}
 
@@ -55,12 +54,12 @@ public class Note implements Serializable {
 		this.name = name;
 	}
 
-	public Date getData() {
-		return data;
+	public String getDate() {
+		return this.date;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDate(String date) {
+		this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 	}
 
 	public String getContent() {

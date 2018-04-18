@@ -15,7 +15,6 @@ public class NewNoteDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
-	private Date data;
 	private String content;
 	private Integer userid;
 	
@@ -23,7 +22,6 @@ public class NewNoteDTO implements Serializable{
 	public NewNoteDTO(Note note) {
 		this.id = note.getId();
 		this.name=note.getName();
-		this.data =note.getData();
 		this.content =note.getContent();
 		this.userid = note.getUser().getId();
 	}
@@ -40,12 +38,6 @@ public class NewNoteDTO implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public Date getData() {
-		return data;
-	}
-	public void setData(Date data) {
-		this.data = data;
 	}
 	public String getContent() {
 		return content;

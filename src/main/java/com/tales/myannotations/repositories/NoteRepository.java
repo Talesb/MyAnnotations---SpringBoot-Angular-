@@ -23,8 +23,8 @@ public interface NoteRepository extends JpaRepository<Note,Integer>{
 	
 	@Modifying
 	@Transactional
-	@Query("update Note n SET n.data =:data where n.id =:id and n.user.id =:uid")
-	public void updatedata(@Param("id") Integer id,@Param("uid") Integer uid,@Param("data") Date data);
+	@Query("update Note n SET n.date =:date where n.id =:id and n.user.id =:uid")
+	public void updatedata(@Param("id") Integer id,@Param("uid") Integer uid,@Param("date") String date);
 	
 	@Modifying
 	@Transactional

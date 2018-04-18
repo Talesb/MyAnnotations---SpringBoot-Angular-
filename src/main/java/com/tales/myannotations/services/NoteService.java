@@ -1,5 +1,6 @@
 package com.tales.myannotations.services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class NoteService {
 			if (obj.getContent() != null) {
 				repo.updatecontent(obj.getId(), obj.getUser().getId(), obj.getContent());
 			}
-			repo.updatedata(obj.getId(), obj.getUser().getId(), new Date());
+			repo.updatedata(obj.getId(), obj.getUser().getId(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()));
 		} catch (Exception e) {
 			throw new RuntimeException("Error:" + e.getMessage());
 		}
@@ -108,7 +109,7 @@ public class NoteService {
 	}
 
 	public Note fromDTO(NewNoteDTO noteDto) {
-		Note n1 = new Note(noteDto.getId(),noteDto.getName(),noteDto.getData(),noteDto.getContent());
+		Note n1 = new Note(noteDto.getId(),noteDto.getName(),noteDto.getContent());
 		n1.setUser(userservice.find(noteDto.getUserid()));
 		return n1;
 }
